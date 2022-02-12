@@ -2,8 +2,6 @@ package com.yvzhu.game.matchit2;
 
 import lombok.Data;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * @author zhangyudong.yvzhu@bytedance.com
  * @since 2022/2/11
@@ -22,7 +20,7 @@ public class Node implements Comparable<Node> {
     }
 
     @Override
-    public int compareTo(@NotNull Node o) {
+    public int compareTo(Node o) {
         if (distance == o.getDistance()) {
             return cost - o.getCost();
         }
