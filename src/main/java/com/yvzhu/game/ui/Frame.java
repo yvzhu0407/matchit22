@@ -61,11 +61,6 @@ public class Frame {
     }
 
     public int[][] getRawMp() {
-        for(int i = 0;i < w + 1;i++){
-            for(int j = 0;j < h + 1;j ++){
-                mp2[i][j] = mp[i][j];
-            }
-        }
         for (Frame child : children) {
             if(!child.isUpdate()){
                 if (child.isPlayer()) {
@@ -79,6 +74,11 @@ public class Frame {
     }
 
     private void updateByPlayer(Frame child) {
+        for(int i = 1;i <= w;i++){
+            for(int j = 1;j <= h;j++){
+                mp2[i][j] = mp[i][j];
+            }
+        }
         for (int i = 1; i <= child.getW(); i++) {
             for (int j = 1; j <= child.getH(); j++) {
                 mp2[i + child.getxOffset()][j + child.getyOffset()] = 1000 + mp[i + child.getxOffset()][j + child.getyOffset()];
