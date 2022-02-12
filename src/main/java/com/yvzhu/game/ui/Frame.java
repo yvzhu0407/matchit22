@@ -23,9 +23,7 @@ public class Frame {
     private int yOffset;
     private boolean update = false;
     private boolean player = false;
-
     private static final int MAX_WIDTH = 80, MAX_HEIGHT = 30;
-
 
     public void addChild(Frame child) {
         if (child.getW() + child.getyOffset() > w || child.getH() + child.getyOffset() > h) {
@@ -62,10 +60,10 @@ public class Frame {
 
     public int[][] getRawMp() {
         for (Frame child : children) {
-            if(!child.isUpdate()){
+            if (!child.isUpdate()) {
                 if (child.isPlayer()) {
                     updateByPlayer(child);
-                }else{
+                } else {
                     updateByChild(child);
                 }
             }
@@ -74,8 +72,8 @@ public class Frame {
     }
 
     private void updateByPlayer(Frame child) {
-        for(int i = 1;i <= w;i++){
-            for(int j = 1;j <= h;j++){
+        for (int i = 1; i <= w; i++) {
+            for (int j = 1; j <= h; j++) {
                 mp2[i][j] = mp[i][j];
             }
         }
@@ -148,6 +146,19 @@ public class Frame {
         return mp[x][y];
     }
 
+    public void move(Frame child, int x, int y) {
+        if (child.getxOffset() - x < 0 || child.getyOffset() - y < 0) {
+            return;
+        }
+        if (w - 1 < child.getxOffset() - x || w - 1 < child.getyOffset() - y) {
+            return;
+        }
+        child.setxOffset(child.getxOffset() - x);
+        child.setyOffset(child.getyOffset() - y);
+        this.update = false;
+        child.setUpdate(false);
+    }
+
     public int getH() {
         return h;
     }
@@ -186,18 +197,5 @@ public class Frame {
 
     public void setPlayer(boolean player) {
         this.player = player;
-    }
-
-    public void move(Frame child, int x, int y) {
-        if (child.getxOffset() - x < 0 || child.getyOffset() - y < 0) {
-            return;
-        }
-        if (w - 1 < child.getxOffset() - x || w - 1 < child.getyOffset() - y) {
-            return;
-        }
-        child.setxOffset(child.getxOffset() - x);
-        child.setyOffset(child.getyOffset() - y);
-        this.update = false;
-        child.setUpdate(false);
     }
 }

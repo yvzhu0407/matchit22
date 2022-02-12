@@ -23,11 +23,10 @@ public class Game {
     private Frame player;
     private Frame mp;
     private int seed = 100;
-    private String preStr = "note:";
+    private final String preStr = "note:";
     private String note = "";
-    private Random random;
 
-    public void playWithKeyBoard() throws IOException {
+    public void playWithKeyBoard() {
         if (!isPlayerRound) {
             initStdDraw();
         }
@@ -41,6 +40,18 @@ public class Game {
                 switch (c) {
                     case 'n':
                     case 'N':
+                        StringBuilder sb = new StringBuilder();
+                        while (true) {
+                            if (StdDraw.hasNextKeyTyped()) {
+                                char c1 = StdDraw.nextKeyTyped();
+                                if (c1 >= '0' && c1 <= '9') {
+                                    sb.append(c1);
+                                } else {
+                                    break;
+                                }
+                            }
+                        }
+                        setSeed(Integer.parseInt(sb.toString()));
                         frame = new Frame();
                         mp = mpFactory(frame, 10, 10, seed);
                         player = new Frame(mp, 1, 1, 2, 2);
@@ -50,9 +61,10 @@ public class Game {
                         break;
                     case 'L':
                     case 'l':
-                        if (frame != null)
-                        tr.renderFrame(frame.getMp());
-                        isPlayerRound = true;
+                        if (frame != null) {
+                            tr.renderFrame(frame.getMp());
+                            isPlayerRound = true;
+                        }
                         break;
                     case 'q':
                     case 'Q':
@@ -61,7 +73,9 @@ public class Game {
                     default:
                         break;
                 }
-                break;
+                if (isPlayerRound) {
+                    break;
+                }
             }
         }
         Position pre = null, cur;
@@ -122,12 +136,16 @@ public class Game {
         h = Math.min(father.getH(), h);
 
         Frame frame = new Frame(father, w, h, (father.getW() - w) / 2, (father.getH() - h) / 2);
-        random = new Random(seed);
+        Random random = new Random(seed);
         for (int i = 1; i <= w; i++) {
             for (int j = 1; j <= h; j++) {
                 frame.update(i, j, random.nextInt(8) + 1);
             }
         }
         return frame;
+    }
+
+    public void setSeed(int seed) {
+        this.seed = seed;
     }
 }
