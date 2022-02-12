@@ -21,7 +21,7 @@ public class Frame {
     private TETile[][] teTileMp;
     private int xOffset;
     private int yOffset;
-    private boolean update = true;
+    private boolean update = false;
     private boolean player = false;
 
     private static final int MAX_WIDTH = 80, MAX_HEIGHT = 30;
@@ -46,6 +46,7 @@ public class Frame {
         this.father = father;
         if (father != null) {
             father.addChild(this);
+            father.setUpdate(false);
         }
         if (h <= 0 || w <= 0) {
             throw new UnsupportedOperationException("size should be positive.");
@@ -66,18 +67,18 @@ public class Frame {
             }
         }
         for (Frame child : children) {
-            child.getRawMp();
-            if (child.isPlayer()) {
-                updateByPlayer(child);
-            } else {
-                updateByChild(child);
+            if(!child.isUpdate()){
+                if (child.isPlayer()) {
+                    updateByPlayer(child);
+                }else{
+                    updateByChild(child);
+                }
             }
         }
         return mp2;
     }
 
     private void updateByPlayer(Frame child) {
-        int[][] c_mp = child.getRawMp();
         for (int i = 1; i <= child.getW(); i++) {
             for (int j = 1; j <= child.getH(); j++) {
                 mp2[i + child.getxOffset()][j + child.getyOffset()] = 1000 + mp[i + child.getxOffset()][j + child.getyOffset()];
@@ -163,6 +164,14 @@ public class Frame {
         return yOffset;
     }
 
+    public void setxOffset(int xOffset) {
+        this.xOffset = xOffset;
+    }
+
+    public void setyOffset(int yOffset) {
+        this.yOffset = yOffset;
+    }
+
     public boolean isUpdate() {
         return update;
     }
@@ -179,15 +188,16 @@ public class Frame {
         this.player = player;
     }
 
-    public void move(int x, int y) {
-        if (xOffset - x < 0 || yOffset - y < 0) {
+    public void move(Frame child, int x, int y) {
+        if (child.getxOffset() - x < 0 || child.getyOffset() - y < 0) {
             return;
         }
-        if (father.getW() - 1 < xOffset - x || father.getH() - 1 < yOffset - y) {
+        if (w - 1 < child.getxOffset() - x || w - 1 < child.getyOffset() - y) {
             return;
         }
-        xOffset -= x;
-        yOffset -= y;
+        child.setxOffset(child.getxOffset() - x);
+        child.setyOffset(child.getyOffset() - y);
         this.update = false;
+        child.setUpdate(false);
     }
 }

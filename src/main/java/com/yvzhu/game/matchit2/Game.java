@@ -69,13 +69,13 @@ public class Game {
             if (StdDraw.hasNextKeyTyped()) {
                 char c = StdDraw.nextKeyTyped();
                 if (c == 'w' || c == 'W') {
-                    player.move(0, -1);
+                    mp.move(player, 0, -1);
                 } else if (c == 'a' || c == 'A') {
-                    player.move(1, 0);
+                    mp.move(player, 1, 0);
                 } else if (c == 's' || c == 'S') {
-                    player.move(0, 1);
+                    mp.move(player, 0, 1);
                 } else if (c == 'd' || c == 'D') {
-                    player.move(-1, 0);
+                    mp.move(player, -1, 0);
                 } else if (c == 'b' || c == 'B') {
                     isPlayerRound = false;
                     playWithKeyBoard();
